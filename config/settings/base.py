@@ -89,14 +89,18 @@ THIRD_PARTY_APPS = [
     "allauth.socialaccount.providers.google",
     "django_celery_beat",
     "guardian",
+    "leaflet",
 ]
 
 LOCAL_APPS = [
     "wrc_reporting_tool.users",
     # Your stuff: custom apps go here
+    "report",
 ]
 # https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
+INSTALLED_APPS += ["tailwind", "theme"]
+TAILWIND_APP_NAME = "theme"
 
 # MIGRATIONS
 # ------------------------------------------------------------------------------

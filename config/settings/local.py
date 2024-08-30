@@ -72,5 +72,3 @@ CELERY_TASK_ALWAYS_EAGER = True
 CELERY_TASK_EAGER_PROPAGATES = True
 # Your stuff...
 # ------------------------------------------------------------------------------
-INSTALLED_APPS += ["report", "leaflet", "tailwind", "theme"]
-TAILWIND_APP_NAME = "theme"
