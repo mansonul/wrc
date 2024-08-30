@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% load static %}
+
+
+{% block content %}
+    <p>Salut</p>
+
+    {% for cat in object_list %}
+        <p>{{cat.parent_category}}</p>
+        {% comment %} <p>{{cat.name}}</p> {% endcomment %}
+    {% endfor %}
+{% endblock content %}
