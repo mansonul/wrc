@@ -61,7 +61,7 @@ SECURE_CONTENT_TYPE_NOSNIFF = env.bool(
     default=True,
 )
 
-CSRF_TRUSTED_ORIGINS = ['http://68.183.217.100',]
+CSRF_TRUSTED_ORIGINS = ['http://164.92.253.222',]
 
 # STATIC & MEDIA
 # ------------------------
