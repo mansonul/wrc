@@ -23,7 +23,7 @@ def report_create(request):
     if request.user.is_authenticated:
         user = request.user
     elif request.user.is_anonymous:
-        user = User.objects.get(id=2)
+        user = User.objects.get(id=1)
 
     if request.method == "POST":
         form = ReportForm(request.POST)
