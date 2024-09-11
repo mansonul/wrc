@@ -1,6 +1,11 @@
 {% load allauth %}
 {% load crispy_forms_tags %}
 
+<section class="bg-white dark:bg-gray-900">
+  <div class="max-w-screen-xl px-4 py-8 mx-auto lg:py-24 lg:px-6">
+    <div class="max-w-screen-md mx-auto mb-8 text-center lg:mb-12">
+      <h2 class="mb-4 text-3xl font-extrabold tracking-tight text-gray-900 dark:text-white">O parte dintre cazurile soluționate</h2>
+    </div>
 {% if attrs.type == "textarea" %}
   <div class="row mb-3">
     <div class="col-sm-10">
@@ -64,3 +69,5 @@
 {% if slots.help_text %}
   <div class="form-text">{% slot help_text %}{% endslot %}</div>
 {% endif %}
+  </div>
+</section>

@@ -64,3 +64,10 @@ def specie_partial(request):
     specie = Specie.objects.filter(category=categorie)
     context = {"specie": specie}
     return render(request, "partials/specie.html", context)
+
+
+def index(request):
+    report = Report.objects.all().select_related('image')[:3]
+    context = {"report_list": report}
+
+    return render(request, "base.html", context)
