@@ -12,6 +12,16 @@ from wrc_reporting_tool.users.models import User
 class ReportList(ListView):
     model = Report
 
+    def get_context_data(self, **kwargs):
+        # Call the base implementation first to get a context
+        context = super().get_context_data(**kwargs)
+        # Add in a QuerySet of all the reports
+        if self.request.user.is_authenticated:
+            context["report_list"] = Report.objects.filter(user=self.request.user)
+        else:
+            context["report_list"] = Report.objects.all()
+        return context
+
 
 class ReportDetail(DetailView):
     model = Report

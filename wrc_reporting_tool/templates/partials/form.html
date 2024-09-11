@@ -120,6 +120,12 @@
         var detail = e.detail;
         var map = detail.map.fitWorld();
 
+        map.on('draw:created', function (e) {
+          const coordinates = e.layer._latlng;
+          document.getElementById("{{form.latitudine.id_for_label}}").value = coordinates.lat;
+          document.getElementById("{{form.longitudine.id_for_label}}").value = coordinates.lng;
+      });
+
         L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
           maxZoom: 19,
           attribution: '© WRC OpenStreetMap'
@@ -149,6 +155,7 @@
           document.getElementById("{{form.longitudine.id_for_label}}").value = c.latlng.lng;
         }
         map.on('locationfound', setLatLng);
+        
     }, false);
     </script>
 {% endblock javascript %}

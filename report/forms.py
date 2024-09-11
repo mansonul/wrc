@@ -11,7 +11,7 @@ class ImageForm(forms.ModelForm):
         fields = ["image",]
         widgets = {'image': forms.FileInput(attrs={
             'class': 'sr-only',
-            'accept': '.jpg, .jpeg, .png',
+            'accept': 'image/.jpg, image/.jpeg, image/.png',
             'capture': 'environment',
             'x-on:change': "files = $event.target.files;",
             'x-on:dragover': "$el.classList.add('active')",
