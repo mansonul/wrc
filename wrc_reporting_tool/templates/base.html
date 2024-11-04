@@ -41,7 +41,7 @@
     <script src="{% static 'js/htmx.min.js' %}" defer></script>
     <link rel="stylesheet" href="{% static 'js/leaflet/leaflet.css' %}" />
     <script src="{% static 'js/leaflet/leaflet.js'%}"></script>
-    <script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine.min.js"></script>
+    <script src="{% static 'js/alpine.min.js'%}"></script>
 
     {% block head %}{% endblock head %}
     <style>
@@ -196,7 +196,7 @@ Programul de salvare face parte din proiectul "BatWatch", finanțat prin <a href
       </div>
     </footer>
     {% endblock footer %}
-    <script src="https://cdn.jsdelivr.net/npm/flowbite@2.4.1/dist/flowbite.min.js"></script>
+    <script src="{% static 'js/flowbite.min.js'%}"></script>
     {% block javascript %}{% endblock javascript %}
   </body>
 </html>
