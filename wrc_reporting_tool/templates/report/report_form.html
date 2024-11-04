@@ -1,10 +1,9 @@
 {% extends "base.html" %}
-{% load leaflet_tags %}
+{% load leaflet_tags static %}
 {% block head %}
-  {% comment %} {% leaflet_js plugins="forms" %}
-  {% leaflet_css plugins="forms" %} {% endcomment %}
-  <link rel="stylesheet" href="https://unpkg.com/leaflet-geosearch@3.0.0/dist/geosearch.css"/>
-  <script src="https://unpkg.com/leaflet-geosearch@latest/dist/bundle.min.js"></script>
+
+<script src="{% static 'js/leaflet/leaflet-geosearch.min.js'%}"></script>
+<link rel="stylesheet" href="{% static 'js/leaflet/geosearch.css' %}" />
 
 <style>
 
