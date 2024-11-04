@@ -82,15 +82,17 @@ DJANGO_APPS = [
 THIRD_PARTY_APPS = [
     "crispy_forms",
     "crispy_tailwind",
-    # "crispy_bootstrap5",
     "allauth",
     "allauth.account",
     "allauth.mfa",
     "allauth.socialaccount",
     "allauth.socialaccount.providers.google",
     "django_celery_beat",
+    "django_filters",
     "guardian",
     "leaflet",
+    "django_htmx",
+    "simple_history",
 ]
 
 LOCAL_APPS = [
@@ -157,6 +159,8 @@ MIDDLEWARE = [
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     "allauth.account.middleware.AccountMiddleware",
+    "django_htmx.middleware.HtmxMiddleware",
+    "simple_history.middleware.HistoryRequestMiddleware",
 ]
 
 # STATIC
@@ -311,7 +315,7 @@ CELERY_WORKER_SEND_TASK_EVENTS = True
 CELERY_TASK_SEND_SENT_EVENT = True
 # django-allauth
 # ------------------------------------------------------------------------------
-ACCOUNT_ALLOW_REGISTRATION = env.bool("DJANGO_ACCOUNT_ALLOW_REGISTRATION", True)
+ACCOUNT_ALLOW_REGISTRATION = env.bool("DJANGO_ACCOUNT_ALLOW_REGISTRATION", False)
 # https://docs.allauth.org/en/latest/account/configuration.html
 ACCOUNT_AUTHENTICATION_METHOD = "email"
 # https://docs.allauth.org/en/latest/account/configuration.html
@@ -343,3 +347,7 @@ LEAFLET_CONFIG = {
     'RESET_VIEW': False,
     'TILES': 'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
 }
+
+
+PAGE_SIZE = 5
+SESIZARI_PAGE_SIZE = 3

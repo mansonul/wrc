@@ -1,0 +1,141 @@
+[
+    {
+        "model": "report.statuscategorie",
+        "pk": 1,
+        "fields": {
+            "name": "Rezolvat"
+        }
+    },
+    {
+        "model": "report.statuscategorie",
+        "pk": 2,
+        "fields": {
+            "name": "Nesoluționat"
+        }
+    },
+    {
+        "model": "report.statuscategorie",
+        "pk": 3,
+        "fields": {
+            "name": "Excludere"
+        }
+    },
+    {
+        "model": "report.statuscategorie",
+        "pk": 4,
+        "fields": {
+            "name": "Relocare"
+        }
+    },
+    {
+        "model": "report.statuscategorie",
+        "pk": 5,
+        "fields": {
+            "name": "Centru reabilitare"
+        }
+    },
+    {
+        "model": "report.status",
+        "pk": 1,
+        "fields": {
+            "name": "În așteptare",
+            "categorie": null
+        }
+    },
+    {
+        "model": "report.status",
+        "pk": 2,
+        "fields": {
+            "name": "Preluat",
+            "categorie": null
+        }
+    },
+    {
+        "model": "report.status",
+        "pk": 4,
+        "fields": {
+            "name": "colonie fără intervenție",
+            "categorie": 1
+        }
+    },
+    {
+        "model": "report.status",
+        "pk": 5,
+        "fields": {
+            "name": "individ izolat fără intervenție",
+            "categorie": 1
+        }
+    },
+    {
+        "model": "report.status",
+        "pk": 6,
+        "fields": {
+            "name": "colonie distrusă",
+            "categorie": 2
+        }
+    },
+    {
+        "model": "report.status",
+        "pk": 7,
+        "fields": {
+            "name": "individ izolat omorât",
+            "categorie": 2
+        }
+    },
+    {
+        "model": "report.status",
+        "pk": 8,
+        "fields": {
+            "name": "incert",
+            "categorie": 2
+        }
+    },
+    {
+        "model": "report.status",
+        "pk": 9,
+        "fields": {
+            "name": "colonie",
+            "categorie": 3
+        }
+    },
+    {
+        "model": "report.status",
+        "pk": 10,
+        "fields": {
+            "name": "colonie din anvelopare",
+            "categorie": 3
+        }
+    },
+    {
+        "model": "report.status",
+        "pk": 11,
+        "fields": {
+            "name": "colonie",
+            "categorie": 4
+        }
+    },
+    {
+        "model": "report.status",
+        "pk": 12,
+        "fields": {
+            "name": "individ izolat",
+            "categorie": 4
+        }
+    },
+    {
+        "model": "report.status",
+        "pk": 13,
+        "fields": {
+            "name": "colonie",
+            "categorie": 5
+        }
+    },
+    {
+        "model": "report.status",
+        "pk": 14,
+        "fields": {
+            "name": "individ izolat",
+            "categorie": 5
+        }
+    }
+]

@@ -1,0 +1,119 @@
+[
+    {
+        "model": "report.categorietipconflict",
+        "pk": 1,
+        "fields": {
+            "name": "Colonie"
+        }
+    },
+    {
+        "model": "report.categorietipconflict",
+        "pk": 2,
+        "fields": {
+            "name": "Individ izolat"
+        }
+    },
+    {
+        "model": "report.categorietipconflict",
+        "pk": 3,
+        "fields": {
+            "name": "Urgență"
+        }
+    },
+    {
+        "model": "report.tipconflict",
+        "pk": 1,
+        "fields": {
+            "name": "Biserică",
+            "categorie": 1
+        }
+    },
+    {
+        "model": "report.tipconflict",
+        "pk": 2,
+        "fields": {
+            "name": "Industrial",
+            "categorie": 1
+        }
+    },
+    {
+        "model": "report.tipconflict",
+        "pk": 3,
+        "fields": {
+            "name": "Comercial",
+            "categorie": 1
+        }
+    },
+    {
+        "model": "report.tipconflict",
+        "pk": 4,
+        "fields": {
+            "name": "Rezidențial-izolație",
+            "categorie": 1
+        }
+    },
+    {
+        "model": "report.tipconflict",
+        "pk": 5,
+        "fields": {
+            "name": "Rezidențial-țevi",
+            "categorie": 1
+        }
+    },
+    {
+        "model": "report.tipconflict",
+        "pk": 6,
+        "fields": {
+            "name": "Rezidențial-geam",
+            "categorie": 1
+        }
+    },
+    {
+        "model": "report.tipconflict",
+        "pk": 7,
+        "fields": {
+            "name": "Rezidențial-perete",
+            "categorie": 1
+        }
+    },
+    {
+        "model": "report.tipconflict",
+        "pk": 8,
+        "fields": {
+            "name": "Industrial",
+            "categorie": 2
+        }
+    },
+    {
+        "model": "report.tipconflict",
+        "pk": 9,
+        "fields": {
+            "name": "Comercial",
+            "categorie": 2
+        }
+    },
+    {
+        "model": "report.tipconflict",
+        "pk": 10,
+        "fields": {
+            "name": "Rezidențial",
+            "categorie": 2
+        }
+    },
+    {
+        "model": "report.tipconflict",
+        "pk": 11,
+        "fields": {
+            "name": "Blocuri anvelopate",
+            "categorie": 3
+        }
+    },
+    {
+        "model": "report.tipconflict",
+        "pk": 12,
+        "fields": {
+            "name": "Colonie în interior",
+            "categorie": 3
+        }
+    }
+]

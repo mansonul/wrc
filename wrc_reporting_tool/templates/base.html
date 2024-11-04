@@ -37,31 +37,52 @@
     <!-- Tailwind -->
     {% tailwind_css %}
     <link href="https://cdn.jsdelivr.net/npm/flowbite@2.4.1/dist/flowbite.min.css" rel="stylesheet" />
-    <script src="https://unpkg.com/htmx.org@2.0.1"></script>
+    
+    <script src="{% static 'js/htmx.min.js' %}" defer></script>
+    <link rel="stylesheet" href="{% static 'js/leaflet/leaflet.css' %}" />
+    <script src="{% static 'js/leaflet/leaflet.js'%}"></script>
+    <script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine.min.js"></script>
 
     {% block head %}{% endblock head %}
+    <style>
+      .map {
+        height: 400px;
+        z-index: 0;
+      }
+      
+      .map-preview {
+        height: 100px;
+        width: 150px;
+        z-index: 0;
+      }
+    </style>
   </head>
 
   <body>
-    <header class="fixed w-full">
+
+    {% include "partials/navigation.html" %}
+    {% comment %} <header class="fixed w-full">
       <nav class="bg-white border-gray-200 py-2.5 dark:bg-gray-900">
         <div class="flex flex-wrap gap-4 items-center justify-end max-w-screen-xl px-4 mx-auto">
           <div class="flex items-center lg:order-2">
-            <a href="{% url 'reports:list' %}" class="text-white bg-purple-700 hover:bg-purple-800 focus:ring-4 focus:ring-purple-300 font-medium rounded-lg text-sm px-4 lg:px-5 py-2 lg:py-2.5 sm:mr-2 lg:mr-0 dark:bg-purple-600 dark:hover:bg-purple-700 focus:outline-none dark:focus:ring-purple-800">Rapoarte</a>
+            <a href="{% url 'reports:list' %}"
+              class="text-white bg-purple-700 hover:bg-purple-800 focus:ring-4 focus:ring-purple-300 font-medium rounded-lg text-sm px-4 lg:px-5 py-2 lg:py-2.5 sm:mr-2 lg:mr-0 dark:bg-purple-600 dark:hover:bg-purple-700 focus:outline-none dark:focus:ring-purple-800">Sesizări</a>
           </div>
           <div class="flex items-center lg:order-2">
             <a href="{% url 'reports:add_report' %}" class="text-white bg-purple-700 hover:bg-purple-800 focus:ring-4 focus:ring-purple-300 font-medium rounded-lg text-sm px-4 lg:px-5 py-2 lg:py-2.5 sm:mr-2 lg:mr-0 dark:bg-purple-600 dark:hover:bg-purple-700 focus:outline-none dark:focus:ring-purple-800">Raportează</a>
           </div>
+          {% if request.user.is_authenticated %}
+          <div class="flex items-center lg:order-2">
+            <a href="{% url 'dash_list' %}" class="text-white bg-purple-700 hover:bg-purple-800 focus:ring-4 focus:ring-purple-300 font-medium rounded-lg text-sm px-4 lg:px-5 py-2 lg:py-2.5 sm:mr-2 lg:mr-0 dark:bg-purple-600 dark:hover:bg-purple-700 focus:outline-none dark:focus:ring-purple-800">Dashboard</a>
+          </div>
+          {% endif %}
         </div>
       </nav>
-    </header>
+    </header> {% endcomment %}
 
     {% block main %}
     <section class="bg-white dark:bg-gray-900">
       <div class="max-w-screen-xl px-4 py-8 mx-auto lg:py-24 lg:px-6">
-        <div class="max-w-screen-md mx-auto mb-7 text-center">
-          <img src="{% static 'images/logo/wrc.png' %}" class="-mb-20 -mt-10" alt="hero image" />
-        </div>
         <div class="max-w-screen-md mx-auto mb-8 text-center lg:mb-12">
           <h2 class="mb-4 text-3xl font-extrabold tracking-tight text-gray-900 dark:text-white">
             {% block main_text %}
@@ -75,69 +96,32 @@
     
     {% block content %}
     <!-- Start block -->
-    <section class="bg-gray-50 dark:bg-gray-800">
+    <section class="bg-gray-50 dark:bg-gray-800" id="main">
       <div class="max-w-screen-xl px-4 py-8 mx-auto space-y-12 lg:space-y-20 lg:py-24 lg:px-6">
-        <!-- Row -->
 
         <!-- Row -->
-        <div class="items-center gap-8 lg:grid lg:grid-cols-2 xl:gap-16">
+        <div class="items-center">
           <div class="text-gray-500 sm:text-lg dark:text-gray-400">
             <h2 class="mb-4 text-3xl font-extrabold tracking-tight text-gray-900 dark:text-white">Cum funcționează?</h2>
-            <p class="mb-8 font-light lg:text-xl">Deliver great service experiences fast - without the complexity of traditional ITSM solutions. Accelerate critical development work, eliminate toil, and deploy changes with ease.</p>
-            <!-- List -->
-            <ul role="list" class="pt-8 space-y-5 border-t border-gray-200 my-7 dark:border-gray-700">
-              <li class="flex space-x-3">
-                <!-- Icon -->
-                <svg class="flex-shrink-0 w-5 h-5 text-purple-500 dark:text-purple-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                  <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
-                </svg>
-                <span class="text-base font-medium leading-tight text-gray-900 dark:text-white">Dynamic reports and dashboards</span>
-              </li>
-              <li class="flex space-x-3">
-                <!-- Icon -->
-                <svg class="flex-shrink-0 w-5 h-5 text-purple-500 dark:text-purple-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                  <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
-                </svg>
-                <span class="text-base font-medium leading-tight text-gray-900 dark:text-white">Templates for everyone</span>
-              </li>
-              <li class="flex space-x-3">
-                <!-- Icon -->
-                <svg class="flex-shrink-0 w-5 h-5 text-purple-500 dark:text-purple-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                  <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
-                </svg>
-                <span class="text-base font-medium leading-tight text-gray-900 dark:text-white">Development workflow</span>
-              </li>
-              <li class="flex space-x-3">
-                <!-- Icon -->
-                <svg class="flex-shrink-0 w-5 h-5 text-purple-500 dark:text-purple-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                  <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
-                </svg>
-                <span class="text-base font-medium leading-tight text-gray-900 dark:text-white">Limitless business automation</span>
-              </li>
-              <li class="flex space-x-3">
-                <!-- Icon -->
-                <svg class="flex-shrink-0 w-5 h-5 text-purple-500 dark:text-purple-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                  <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
-                </svg>
-                <span class="text-base font-medium leading-tight text-gray-900 dark:text-white">Knowledge management</span>
-              </li>
-            </ul>
-            <p class="font-light lg:text-xl">Deliver great service experiences fast - without the complexity of traditional ITSM solutions.</p>
+            <p class="mb-8 font-light lg:text-xl">
+              Această aplicație vine în ajutorul celor care au conflicte cu animalele sălbatice și doresc să le rezolve cu ajutorul unor specialiști. Aplicația este în mod special axată pe lilieci. Aceștia pot găsi adăpost în orice clădire realizată de om. Deși nu prezintă un pericol pentru oameni, există situații în care prezența liliecilor poate genera conflicte (zgomote, intrări repetate în casă, etc.). Toate speciile de lilieci din România și Uniunea Europeană sunt protejate de lege, iar soluționarea conflictelor trebuie realizată cu ajutorul specialiștilor. Acest lucru nu implică costuri (în afară de transport către zone îndepărtate față de București), însă deseori acestea se pot soluționa fără deplasări. Aplicația are rolul de a vă pune în legătură cu specialiștii, de a înregistra cazurile apărute și de a ține o evidență a conflictelor în România, îndeosebi pentru a putea studia pe viitor aceste conflicte. Vă încurajăm să o utilizați pentru orice conflict existent, iar în cel mai scurt timp, un coleg vă va contacta pentru detalii.
+Programul de salvare face parte din proiectul "BatWatch", finanțat prin <a href="https://www.facebook.com/platformademediupentrubucuresti" class="font-semibold underline hover:no-underline">Platforma de mediu pentru București</a> inițiată de <a href="https://www.facebook.com/fundatiacomunitarabucuresti" class="font-semibold underline hover:no-underline">Fundația Comunitară București</a> și <a href="https://www.facebook.com/ING" class="font-semibold underline hover:no-underline">ING</a>, prin runda susținută de <a href="https://www.facebook.com/penny.ro" class="font-semibold underline hover:no-underline">PENNY Romania</a>.
+            </p>
           </div>
         </div>
       </div>
     </section>
     <!-- End block -->
-
+    {% if report_list %}
     <section class="bg-white dark:bg-gray-900">
       <div class="max-w-screen-xl px-4 py-8 mx-auto lg:py-24 lg:px-6">
         <div class="max-w-screen-md mx-auto mb-8 text-center lg:mb-12">
           <h2 class="mb-4 text-3xl font-extrabold tracking-tight text-gray-900 dark:text-white">O parte dintre cazurile soluționate</h2>
         </div>
         <!-- Pricing Card -->
-        <div class="gap-8 lg:grid lg:grid-cols-3 sm:gap-6 xl:gap-10 lg:gap-y-0">
+        <div class="flex flex-col gap-8 lg:grid lg:grid-cols-3">
           {% for report in report_list %}
-            <div class="flex flex-col justify-center max-w-sm bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
+            <div class="flex flex-col justify-center bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
               <a href="#">
                   <img class="rounded-t-lg h-48 w-full object-cover" src="{{report.image.image.url}}" alt="" />
               </a>
@@ -157,6 +141,7 @@
           </div>
       </div>
     </section>
+    {% endif %}
 
     {% endblock content %}
 
@@ -212,7 +197,6 @@
     </footer>
     {% endblock footer %}
     <script src="https://cdn.jsdelivr.net/npm/flowbite@2.4.1/dist/flowbite.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine.min.js"></script>
     {% block javascript %}{% endblock javascript %}
   </body>
 </html>

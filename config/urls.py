@@ -3,12 +3,11 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
-from django.urls import include
-from django.urls import path
+from django.urls import include, path
 from django.views import defaults as default_views
 from django.views.generic import TemplateView
 
-from report.views import index
+from report.views import index, dashboard_list, add_voluntar_to_sesizare, completeaza_raport, export
 
 
 urlpatterns = [
@@ -19,14 +18,21 @@ urlpatterns = [
         TemplateView.as_view(template_name="pages/about.html"),
         name="about",
     ),
-    path("report/", include("report.urls", namespace="reports")),
+    path("sesizari/", include("report.urls", namespace="sesizari")),
+    path("dashboard/", dashboard_list, name="dash_list"),
+    path("dashboard/export", export, name="export"),
+
     # Django Admin, use {% url 'admin:index' %}
     path(settings.ADMIN_URL, admin.site.urls),
+    
     # User management
     path("users/", include("wrc_reporting_tool.users.urls", namespace="users")),
     path("accounts/", include("allauth.urls")),
+    
     # Your stuff: custom urls includes go here
-    # ...
+    path("dashboard/<int:pk>/", add_voluntar_to_sesizare, name="preia"),
+    path("dashboard/completeaza-raport/<int:pk>/", completeaza_raport, name="completeaza_raport"),
+    
     # Media files
     *static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT),
 ]

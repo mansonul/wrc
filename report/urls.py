@@ -1,17 +1,14 @@
 from django.urls import path
 
-from .views import ReportList, ReportDetail, report_create, specie_partial
+from report.views import sesizare_list, report_create, specie_partial, kmz, sesizare_detail, voluntar_signup
 
 
 app_name = "reports"
 urlpatterns = [
     path("add/", report_create, name="add_report"),
+    path("voluntar/add/", voluntar_signup, name="add_voluntar"),
     path("partials/specie/", specie_partial, name="specie"),
-    # path("categories/", CategoryList.as_view(), name="category_list"),
-    # path("moderare/", AddsInModerationList.as_view(), name="pending"),
-    # path("adauga-anunt/", AddCreate.as_view(), name="create"),
-    # path("sterge/<int:pk>/", AddDelete.as_view(), name="delete"),
-    # path("actualizare/<int:pk>", AddUpdate.as_view(), name="update"),
-    path("<int:pk>/", ReportDetail.as_view(), name="report_detail"),
-    path("", ReportList.as_view(), name="list"),
+    path("gis/export/gigel.kml", kmz, name="export_kmz"),
+    path("<int:pk>/", sesizare_detail, name="report_detail"),
+    path("", sesizare_list, name="list"),
 ]

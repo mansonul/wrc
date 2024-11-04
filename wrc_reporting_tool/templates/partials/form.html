@@ -1,161 +1,182 @@
 <form method="post" enctype="multipart/form-data">
-    {% csrf_token %}
-    <div class="space-y-12">
-      <div class="border-b border-gray-900/10 pb-12">
-        <div class="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
-          
-          <div class="col-span-full">
-            {% if form.name.errors %}
-              <ol>
-              {% for error in form.name.errors %}
-                  <li><strong>{{ error|escape }}</strong></li>
-              {% endfor %}
-              </ol>
-            {% endif %}
-            <label for="{{form.name.id_for_label}}" class="block text-sm font-medium leading-6 text-gray-900 dark:text-white">Denumire incident</label>
-            <div class="mt-2">
-              <div class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-0 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-                {{form.name}}
-              </div>
-            </div>
-          </div>
-
-          <div class="col-span-full">
-            <label for="{{form.species_category.id_for_label}}" class="block text-sm font-medium leading-6 text-gray-900 dark:text-white">Selectează clasa</label>
-            <div class="mt-2">
-              <select id="{{form.species_category.id_for_label}}" name="species_category" hx-get="{% url 'reports:specie' %}" hx-trigger="change" hx-target="#specie" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-                {% for clasa in specii %}  
-                  <option value="{{clasa.pk}}">{{clasa.name}}</option>
-                {% endfor %}
-              </select>
-            </div>
-          </div>
-
-          <div id="specie" class="col-span-full">
-            {% include "partials/specie.html" %}
-          </div>
-
-          {% if form.location.errors %}
+  {% csrf_token %}
+  <div class="space-y-12">
+    <div class="border-b border-gray-900/10 pb-12">
+      <div class="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
+        
+        <div class="col-span-full">
+          {% if form.name.errors %}
             <ol>
-            {% for error in form.location.errors %}
+            {% for error in form.name.errors %}
                 <li><strong>{{ error|escape }}</strong></li>
             {% endfor %}
             </ol>
           {% endif %}
-          <div class="col-span-full">
-            <label for="{{form.location.id_for_label}}" class="block text-sm font-medium leading-6 text-gray-900 dark:text-white">{{form.location.label}}</label>
-            <div class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-              {{form.location}}
+          <label for="{{form.name.id_for_label}}" class="block text-sm font-medium leading-6 text-gray-900 dark:text-white">Denumire incident</label>
+          <div class="mt-2">
+            <div class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-0 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+              {{form.name}}
             </div>
           </div>
-
-          <div class="col-span-full">
-            <label for="{{form.latitudine.id_for_label}}" class="block text-sm font-medium leading-6 text-gray-900 dark:text-white">{{form.latitudine.label}}</label>
-            <div class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-              {{form.latitudine}}
-            </div>
-          </div>
-
-          <div class="col-span-full">
-            <label for="{{form.longitudine.id_for_label}}" class="block text-sm font-medium leading-6 text-gray-900 dark:text-white">{{form.longitudine.label}}</label>
-            <div class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-              {{form.longitudine}}
-            </div>
-          </div>
-
-          {% if form.img_form.errors %}
-            <ol>
-            {% for error in form.img_form.errors %}
-                <li><strong>{{ error|escape }}</strong></li>
-            {% endfor %}
-            </ol>
-          {% endif %}
-          <div class="col-span-full">
-            <label for="{{img_form.image.id_for_label}}"
-                   class="block text-sm font-medium leading-6 text-gray-900 dark:text-white">
-              Selectează imagine
-            </label>
-            <label for="{{img_form.image.id_for_label}}"
-                   x-data="{ files: null }"
-                   class="flex flex-col items-center justify-center w-full h-64 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:hover:bg-gray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500">
-              <div class="flex flex-col items-center justify-center pt-5 pb-6">
-                <svg class="w-8 h-8 mb-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 16">
-                  <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2"/>
-                </svg>
-                <p class="mb-2 text-sm text-gray-500 dark:text-gray-400"><span class="font-semibold">Click to upload</span> or drag and drop</p>
-                <p class="text-xs text-gray-500 dark:text-gray-400">SVG, PNG, JPG or GIF (MAX. 800x400px)</p>
-              </div>
-                {{ img_form.image }}
-                <template x-if="files !== null">
-                  <div class="flex flex-col space-y-1">
-                    <template x-for="(_,index) in Array.from({ length: files.length })">
-                      <div class="flex flex-row items-center space-x-2">
-                        <template
-                          x-if="files[index].type.includes('image/')"><i class="far fa-file-image fa-fw"></i></template>
-                        <span class="p-5 border-2 border-gray-400 border-dashed rounded-lg font-medium text-gray-900 dark:text-gray-400" x-text="files[index].name">Uploading</span>
-                      </div>
-                    </template>
-                  </div>
-                </template>
-            </label>
-          </div>
-
-          <div class="col-span-full">
-            <label for="{{form.description.id_for_label}}" class="block text-sm font-medium leading-6 text-gray-900 dark:text-white">Scrie o scurtă descriere</label>
-            <div class="mt-2">
-              {{form.description}}
-            </div>
-          </div>
-
         </div>
+
+        <div class="col-span-full">
+          <label class="block text-sm font-medium leading-6 text-gray-900 dark:text-white">Locație</label>
+          <div class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+            <div id="map"></div>
+          </div>
+        </div>
+
+        <div class="hidden col-span-full">
+          {% if form.latitudine.errors %}
+            <ol>
+            {% for error in form.latitudine.errors %}
+                <li><strong>{{ error|escape }}</strong></li>
+            {% endfor %}
+            </ol>
+          {% endif %}
+          <label for="{{form.latitudine.id_for_label}}" class="hidden text-sm font-medium leading-6 text-gray-900 dark:text-white">{{form.latitudine.label}}</label>
+          <div class="hidden bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+            {{form.latitudine}}
+          </div>
+        </div>
+
+        <div class="hidden col-span-full">
+          {% if form.longitudine.errors %}
+            <ol>
+            {% for error in form.longitudine.errors %}
+                <li><strong>{{ error|escape }}</strong></li>
+            {% endfor %}
+            </ol>
+          {% endif %}
+          <label for="{{form.longitudine.id_for_label}}" class="hidden text-sm font-medium leading-6 text-gray-900 dark:text-white">{{form.longitudine.label}}</label>
+          <div class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 hidden w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+            {{form.longitudine}}
+          </div>
+        </div>
+
+        <div class="col-span-full">
+          {% if img_form.errors %}
+          <div class="p-4 mb-4 text-sm rounded-lg dark:bg-gray-800 dark:text-red-400" role="alert">
+            <span class="font-medium">{{img_form.errors}}</span>
+          </div>
+          {% endif %}
+          <label for="{{img_form.image.id_for_label}}"
+                  class="block text-sm font-medium leading-6 text-gray-900 dark:text-white">
+            Selectează imagine
+          </label>
+          <label for="{{img_form.image.id_for_label}}"
+                  x-data="{ files: null }"
+                  class="flex flex-col items-center justify-center w-full h-64 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:hover:bg-gray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500">
+            <div class="flex flex-col items-center justify-center pt-5 pb-6">
+              <svg class="w-8 h-8 mb-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 16">
+                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2"/>
+              </svg>
+              <p class="mb-2 text-sm text-gray-500 dark:text-gray-400"><span class="font-semibold">Click to upload</span> or drag and drop</p>
+              <p class="text-xs text-gray-500 dark:text-gray-400">SVG, PNG, JPG or GIF (MAX. 800x400px)</p>
+            </div>
+              {{ img_form.image }}
+              <template x-if="files !== null">
+                <div class="flex flex-col space-y-1">
+                  <template x-for="(_,index) in Array.from({ length: files.length })">
+                    <div class="flex flex-row items-center space-x-2">
+                      <template
+                        x-if="files[index].type.includes('image/')"><i class="far fa-file-image fa-fw"></i></template>
+                      <span class="p-5 border-2 border-gray-400 border-dashed rounded-lg font-medium text-gray-900 dark:text-gray-400" x-text="files[index].name">Uploading</span>
+                    </div>
+                  </template>
+                </div>
+              </template>
+          </label>
+        </div>
+
+        <div class="col-span-full">
+          {% if form.description.errors %}
+            <ol>
+            {% for error in form.description.errors %}
+                <li><strong>{{ error|escape }}</strong></li>
+            {% endfor %}
+            </ol>
+          {% endif %}
+          <label for="{{form.description.id_for_label}}" class="block text-sm font-medium leading-6 text-gray-900 dark:text-white">Scrie o scurtă descriere</label>
+          <div class="mt-2">
+            {{form.description}}
+          </div>
+        </div>
+
       </div>
-      <button type="submit" class="text-white bg-purple-700 hover:bg-purple-800 focus:ring-4 focus:ring-purple-300 font-medium rounded-lg text-sm px-4 lg:px-5 py-2 lg:py-2.5 sm:mr-2 lg:mr-0 dark:bg-purple-600 dark:hover:bg-purple-700 focus:outline-none dark:focus:ring-purple-800">Adaugă raport</button>
     </div>
-  </form>
+    <button type="submit" class="text-white bg-purple-700 hover:bg-purple-800 focus:ring-4 focus:ring-purple-300 font-medium rounded-lg text-sm px-4 lg:px-5 py-2 lg:py-2.5 sm:mr-2 lg:mr-0 dark:bg-purple-600 dark:hover:bg-purple-700 focus:outline-none dark:focus:ring-purple-800">Adaugă raport</button>
+  </div>
+</form>
 
   {% block javascript %}
 
     <script>
-      window.addEventListener("map:init", function (e) {
-        var detail = e.detail;
-        var map = detail.map.fitWorld();
+      const map = L.map('map').setView([45.9432, 24.9668], 6);
 
-        map.on('draw:created', function (e) {
-          const coordinates = e.layer._latlng;
-          document.getElementById("{{form.latitudine.id_for_label}}").value = coordinates.lat;
-          document.getElementById("{{form.longitudine.id_for_label}}").value = coordinates.lng;
+      L.tileLayer('//{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        maxZoom: 19,
+        attribution: '© WRC OpenStreetMap'
+      }).addTo(map);
+
+      let latitudine = document.getElementById("{{form.latitudine.id_for_label}}");
+      let longitudine = document.getElementById("{{form.longitudine.id_for_label}}");
+
+      function onLocationFound(a) {
+        
+        let marker = new L.marker(a.latlng, {draggable:'true'}).addTo(map);
+          //.bindPopup("You are within " + radius + " meters from this point").openPopup();
+
+        latitudine.value = a.latlng.lat;
+        longitudine.value = a.latlng.lng;
+        
+        marker.on('dragend', function(event){
+          var marker = event.target;
+          var position = marker.getLatLng();
+
+          latitudine.value = position.lat;
+          longitudine.value = position.lng;
+        });
+      };
+
+      const searchControl = new GeoSearch.GeoSearchControl({
+        notFoundMessage: 'Nu am găsit adresa specificată',
+        searchLabel: 'Caută adresă',
+        provider: new GeoSearch.OpenStreetMapProvider(),
+        style: 'bar',
+        showMarker: false,
       });
 
-        L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-          maxZoom: 19,
-          attribution: '© WRC OpenStreetMap'
-        }).addTo(map);
+      function onLocationError(b) {
 
-        function onLocationFound(a) {
-          
-          var radius = a.accuracy;
-          
-          L.marker(a.latlng).addTo(map)
-            .bindPopup("You are within " + radius + " meters from this point").openPopup();
-          
-          L.circle(a.latlng, radius).addTo(map);
+        function onMapClick(e) {
+          marker = new L.marker(e.latlng, {draggable:'true'});
 
-        }
-        map.on('locationfound', onLocationFound);
-        
-        function onLocationError(b) {
-          alert(b.message);
-        }
-        
-        map.on('locationerror', onLocationError);
-        map.locate({setView: true, maxZoom: 16});
-        
-        function setLatLng(c) {
-          document.getElementById("{{form.latitudine.id_for_label}}").value = c.latlng.lat;
-          document.getElementById("{{form.longitudine.id_for_label}}").value = c.latlng.lng;
-        }
-        map.on('locationfound', setLatLng);
-        
-    }, false);
+          marker.on('dragend', function(event){
+            var marker = event.target;
+            var position = marker.getLatLng();
+            marker.setLatLng(new L.LatLng(position.lat, position.lng),{draggable:'true'});
+            map.panTo(new L.LatLng(position.lat, position.lng))
+            latitudine.value = position.lat;
+            longitudine.value = position.lng;
+          });
+
+          map.addLayer(marker);
+
+          latitudine.value = e.latlng.lat;
+          longitudine.value = e.latlng.lng;
+
+        };
+
+        map.once('click', onMapClick);
+        map.addControl(searchControl);
+      }
+
+      map.on('locationfound', onLocationFound);
+      map.on('locationerror', onLocationError);
+
+      map.locate({setView: true, maxZoom: 16});
+
     </script>
 {% endblock javascript %}

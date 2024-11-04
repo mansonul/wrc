@@ -1,0 +1,188 @@
+<div class="bg-white dark:bg-gray-800 relative shadow-md sm:rounded-lg overflow-hidden">
+  <div class="flex flex-col md:flex-row md:items-center md:justify-between space-y-3 md:space-y-0 md:space-x-4 p-4">
+    <div class="flex-1 flex items-center space-x-2">
+      <h5>
+        <span class="text-gray-500">Sesizări:</span>
+      </h5>
+      <h5 class="text-gray-500 dark:text-gray-400 ml-1">{{sesizari.start_index}}-{{sesizari.end_index}} ({{nr_sesizari.count}})</h5>
+      <button type="button" class="group" data-tooltip-target="results-tooltip">
+        <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" viewbox="0 0 20 20" fill="currentColor">
+          <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd" />
+        </svg>
+        <span class="sr-only">More info</span>
+      </button>
+      <div id="results-tooltip" role="tooltip" class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700">
+        Sesizările {{sesizari.start_index}}-{{sesizari.end_index}} din {{nr_sesizari.count}} rezultate<div class="tooltip-arrow" data-popper-arrow=""></div>
+      </div>
+    </div>
+
+    <div class="flex-1 flex items-center space-x-2 justify-end">
+      <h5 class="group flex items-center">
+        <a
+          hx-get="{% url 'export' %}" hx-include="#filterForm"
+        >
+          <span class="text-gray-500 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white ml-1 cursor-pointer">Descarcă tabel</span>
+          <button type="button" class="group">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-6 w-6 text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5M16.5 12 12 16.5m0 0L7.5 12m4.5 4.5V3" />
+            </svg>
+          </button>
+        </a>
+      </h5>
+    </div>
+  </div>
+
+  <div class="overflow-x-auto">
+    <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
+      <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+        <tr>
+          <th scope="col" class="p-4">Sesizare</th>
+          <th scope="col" class="p-4">Status</th>
+          <th scope="col" class="p-4">Dată sesizare</th>
+          <th scope="col" class="p-4">Dată preluare</th>
+          <th scope="col" class="p-4">Sesizare preluată de</th>
+          <th scope="col" class="p-4">Acțiuni</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for sesizare in sesizari %}
+          <tr class="border-b dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-700">
+            <td class="px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+              <span class="bg-primary-100 text-primary-800 text-xs font-medium px-2 py-0.5 rounded dark:bg-primary-900 dark:text-primary-300">{{ sesizare.name }}</span>
+            </td>
+            <td class="px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+              <div class="flex items-center">
+                <div class="h-4 w-4 rounded-full inline-block mr-2 {{ sesizare.status.culoare }}"></div>{{ sesizare.status }}
+              </div>
+            </td>
+            <td class="px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">{{ sesizare.created }}</td>
+            {% if sesizare.raportvoluntar_set.exists %}
+              <td class="px-4 py-3">
+                {% for voluntar in sesizare.raportvoluntar_set.all %}
+                  {{voluntar.preluare_sesizare}}
+                {% endfor %}
+              </td>
+              <td class="px-4 py-3">
+                {% for voluntar in sesizare.raportvoluntar_set.all %}
+                  {{ voluntar.voluntar }}
+                {% endfor %}
+              </td>
+              <td class="px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                {% for raport in sesizare.raportvoluntar_set.all %}
+                <div class="flex items-center space-x-4">
+                  <a
+                    hx-get="{% url 'completeaza_raport' raport.pk %}"
+                    hx-push-url="true"
+                    hx-target="#tabel-sesizari"
+                    hx-swap="innerHTML"
+                    hx-on:htmx:after-request="initFlowbite();"
+                    id="raportButton-{{raport.pk}}"
+                    class="py-2 px-3 flex items-center text-sm font-medium text-center text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-primary-700 focus:z-10 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700 cursor-pointer">
+                    <svg class="w-4 h-4 mr-2 -ml-0.5" fill="currentColor" viewbox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M17.414 2.586a2 2 0 00-2.828 0L7 10.172V13h2.828l7.586-7.586a2 2 0 000-2.828z" />
+                      <path fill-rule="evenodd" d="M2 6a2 2 0 012-2h4a1 1 0 010 2H4v10h10v-4a1 1 0 112 0v4a2 2 0 01-2 2H4a2 2 0 01-2-2V6z" clip-rule="evenodd" />
+                    </svg>Completează raport
+                  </a>
+                </div>
+                  <div class="flex items-center space-x-4">
+                    <a type="button" href="{% url 'reports:report_detail' sesizare.pk %}"
+                      class="py-2 px-3 flex items-center text-sm font-medium text-center text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-primary-700 focus:z-10 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">
+                      <svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 24 24" fill="currentColor" class="w-4 h-4 mr-2 -ml-0.5">
+                        <path d="M12 15a3 3 0 100-6 3 3 0 000 6z" />
+                        <path fill-rule="evenodd" clip-rule="evenodd" d="M1.323 11.447C2.811 6.976 7.028 3.75 12.001 3.75c4.97 0 9.185 3.223 10.675 7.69.12.362.12.752 0 1.113-1.487 4.471-5.705 7.697-10.677 7.697-4.97 0-9.186-3.223-10.675-7.69a1.762 1.762 0 010-1.113zM17.25 12a5.25 5.25 0 11-10.5 0 5.25 5.25 0 0110.5 0z" />
+                      </svg>Vezi sesizare
+                    </a>
+                  </div>
+                  {% endfor %}
+                </div>
+              </td>
+            {% else %}
+              <td class="px-4 py-3">
+                <dd>Nepreluat</dd>
+              </td>
+              <td class="px-4 py-3">
+                <dd>Nepreluat</dd>
+              </td>
+              <td class="px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                <div class="flex items-center space-x-4">
+                  <form method="POST" action="{% url 'preia' pk=sesizare.pk %}">
+                    {% csrf_token %}
+                    {{ preia_sesizare.as_p }}
+                    <button type="submit" class="py-2 px-3 flex items-center text-sm font-medium text-center text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-primary-700 focus:z-10 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">
+                      <svg class="w-4 h-4 mr-2 -ml-0.5" fill="currentColor" viewbox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M17.414 2.586a2 2 0 00-2.828 0L7 10.172V13h2.828l7.586-7.586a2 2 0 000-2.828z" />
+                        <path fill-rule="evenodd" d="M2 6a2 2 0 012-2h4a1 1 0 010 2H4v10h10v-4a1 1 0 112 0v4a2 2 0 01-2 2H4a2 2 0 01-2-2V6z" clip-rule="evenodd" />
+                      </svg>Atribuie/Preia sesizare
+                    </button>
+                  </form>
+                </div>
+                <div class="flex items-center space-x-4">
+                  <a type="button" href="{% url 'reports:report_detail' sesizare.pk %}"
+                    class="py-2 px-3 flex items-center text-sm font-medium text-center text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-primary-700 focus:z-10 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 24 24" fill="currentColor" class="w-4 h-4 mr-2 -ml-0.5">
+                      <path d="M12 15a3 3 0 100-6 3 3 0 000 6z" />
+                      <path fill-rule="evenodd" clip-rule="evenodd" d="M1.323 11.447C2.811 6.976 7.028 3.75 12.001 3.75c4.97 0 9.185 3.223 10.675 7.69.12.362.12.752 0 1.113-1.487 4.471-5.705 7.697-10.677 7.697-4.97 0-9.186-3.223-10.675-7.69a1.762 1.762 0 010-1.113zM17.25 12a5.25 5.25 0 11-10.5 0 5.25 5.25 0 0110.5 0z" />
+                    </svg>Vezi sesizare
+                  </a>
+                </div>
+              </td>
+            {% endif %}
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+  <nav class="flex flex-col md:flex-row justify-between items-start md:items-center space-y-3 md:space-y-0 p-4" aria-label="Table navigation">
+    <ul class="inline-flex items-stretch -space-x-px">
+      <li>
+        {% if sesizari.has_previous %}
+          <a
+            hx-get="{% url 'dash_list' %}?page={{sesizari.previous_page_number}}"
+            hx-target="#tabel-sesizari"
+            hx-swap="innerHTML"
+            hx-include="#filterForm"
+            class="flex items-center justify-center h-full py-1.5 px-3 ml-0 text-gray-500 bg-white rounded-l-lg border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white cursor-pointer">
+            <span class="sr-only">Pagina anterioară</span>
+            <svg class="w-5 h-5" aria-hidden="true" fill="currentColor" viewbox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+              <path fill-rule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clip-rule="evenodd" />
+            </svg>
+          </a>
+        {% endif %}
+      </li>
+      {% for page_number in sesizari.paginator.page_range %}
+
+        <li>
+          <a
+            hx-get="{% url 'dash_list' %}?page={{page_number}}"
+            hx-target="#tabel-sesizari"
+            hx-swap="innerHTML"
+            hx-include="#filterForm"
+            {% if page_number == sesizari.number %}
+              aria-current="page"
+              class="flex items-center justify-center text-sm z-10 py-2 px-3 leading-tight text-primary-600 bg-primary-50 border border-primary-300 hover:bg-primary-100 hover:text-primary-700 dark:border-gray-700 dark:bg-gray-700 dark:text-white"
+            {% else %}
+              class="flex items-center justify-center text-sm py-2 px-3 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white cursor-pointer"
+            {% endif %}>
+            {{page_number}}
+          </a>
+        </li>
+      {% endfor %}
+      {% if sesizari.has_next %}
+        <li>
+          <a
+            hx-get="{% url 'dash_list' %}?page={{sesizari.next_page_number}}"
+            hx-target="#tabel-sesizari"
+            hx-swap="innerHTML"
+            hx-include="#filterForm"
+            class="flex items-center justify-center h-full py-1.5 px-3 leading-tight text-gray-500 bg-white rounded-r-lg border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white cursor-pointer">
+            <span class="sr-only">Următoarea pagină</span>
+            <svg class="w-5 h-5" aria-hidden="true" fill="currentColor" viewbox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+              <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd" />
+            </svg>
+          </a>
+        </li>
+      {% endif %}
+    </ul>
+  </nav>
+</div>

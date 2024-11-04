@@ -1,0 +1,158 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block head %}
+<style>
+  .leaflet-control-layers-expanded {
+    background: #374151;
+    color: #fff;
+  }
+  .leaflet-control-layers-selector {
+    margin: 2px;
+    top: 0;
+  }
+  .leaflet-bar a {
+    background: #374151;
+    color: #fff;
+  }
+  .leaflet-bar a:hover, .leaflet-bar a:focus {
+    color: #374151;
+  }
+  [type="checkbox"], [type="radio"] {
+    background-color: #374151;
+  }
+  [type="checkbox"]:focus, [type="radio"]:focus {
+    --tw-ring-color: none;
+  }
+  .dark [type="checkbox"]:checked, .dark [type="radio"]:checked, [type="checkbox"]:checked, [type="radio"]:checked {
+    background-color: #1f2937;
+  }
+</style>
+<script src="{% static 'leaflet/plugins/svg-icons.js' %}"></script>
+{{sesizari|json_script:"sesizari-json"}}
+{% endblock head %}
+
+{% block main_text %}Cazuri raportate
+{% endblock main_text %}
+{% block content %}
+
+
+<section class="bg-gray-50 dark:bg-gray-800">
+  <div class="max-w-screen-xl px-4 py-8 mx-auto space-y-12 lg:space-y-20 lg:py-24 lg:px-6">
+    <div class="items-center">
+      <div class="text-gray-500 sm:text-lg dark:text-gray-400">
+        <div id="map" style="height: 550px;"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Start block -->
+<section class="bg-white dark:bg-gray-900">
+  <div class="max-w-screen-xl px-4 py-8 mx-auto lg:py-24 lg:px-6">
+    <!-- Pricing Card -->
+    <div class="max-w-screen-md mx-auto mb-8 text-center lg:mb-12">
+      <h2 class="mb-4 text-3xl font-extrabold tracking-tight text-gray-900 dark:text-white">Sesizări</h2>
+    </div>
+    <div id="sesizari">
+      {% include "report/partials/sesizari.html" %}
+    </div>
+  </div>
+
+</section>    
+{% endblock content %}
+
+{% block javascript %}
+<script>
+  let sesizari = JSON.parse(document.getElementById('sesizari-json').textContent)
+  let map = L.map('map').setView([51.505, -0.09], 13);
+
+  L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    maxZoom: 19,
+    attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+  }).addTo(map);
+
+  const markers = [];
+  let overlayMaps = {};
+  let asteptareFeatureGroup = L.featureGroup().addTo(map);
+  let preluatFeatureGroup = L.featureGroup().addTo(map);
+  let rezolvatFeatureGroup = L.featureGroup().addTo(map);
+  let nesolutionatFeatureGroup = L.featureGroup().addTo(map);
+  let excludereFeatureGroup = L.featureGroup().addTo(map);
+  let relocareFeatureGroup = L.featureGroup().addTo(map);
+  let reabilitareFeatureGroup = L.featureGroup().addTo(map);
+  for (let sesizare of sesizari) {
+
+    markers.push([sesizare.latitudine, sesizare.longitudine])
+
+    switch (sesizare.status__categorie) {
+
+      case null:
+        switch (sesizare.status) {
+          case 1:
+            let marker = L.marker.svgMarker([sesizare.latitudine, sesizare.longitudine], { iconOptions: { color: "rgb(231, 70, 148)", fillOpacity: 0.6 }}).addTo(asteptareFeatureGroup);
+            overlayMaps[`<div class="h-3 w-3 inline-block mr-2 ${sesizare.status__culoare}"></div>În așteptare`] = asteptareFeatureGroup;
+            break;
+
+          case 2:
+            L.marker.svgMarker([sesizare.latitudine, sesizare.longitudine], { iconOptions: { color: "rgb(227, 160, 8)", fillOpacity: 0.6 }}).addTo(preluatFeatureGroup);
+            overlayMaps[`<div class="h-3 w-3 inline-block mr-2 ${sesizare.status__culoare}"></div>Preluat`] = preluatFeatureGroup;
+            break;
+        }
+        break;
+
+      case 1:
+        L.marker.svgMarker([sesizare.latitudine, sesizare.longitudine], { iconOptions: { color: "rgb(4, 108, 78)", fillOpacity: 0.6 }}).addTo(rezolvatFeatureGroup);
+        overlayMaps[`<div class="h-3 w-3 inline-block mr-2 ${sesizare.status__culoare}"></div>Rezolvat`] = rezolvatFeatureGroup;
+      break;
+
+      case 2:
+        L.marker.svgMarker([sesizare.latitudine, sesizare.longitudine], { iconOptions: { color: "rgb(200, 30, 30)", fillOpacity: 0.6 }}).addTo(nesolutionatFeatureGroup);
+        overlayMaps[`<div class="h-3 w-3 inline-block mr-2 ${sesizare.status__culoare}"></div>Nesoluționat`] = nesolutionatFeatureGroup;
+        break;
+
+      case 3:
+        L.marker.svgMarker([sesizare.latitudine, sesizare.longitudine], { iconOptions: { color: "rgb(117, 26, 61)", fillOpacity: 0.6 }}).addTo(excludereFeatureGroup);
+        overlayMaps[`<div class="h-3 w-3 inline-block mr-2 ${sesizare.status__culoare}"></div>Excludere`] = excludereFeatureGroup;
+        break;
+
+      case 4:
+        L.marker.svgMarker([sesizare.latitudine, sesizare.longitudine], { iconOptions: { color: "rgb(104, 117, 245)", fillOpacity: 0.6 }}).addTo(relocareFeatureGroup);
+        overlayMaps[`<div class="h-3 w-3 inline-block mr-2 ${sesizare.status__culoare}"></div>Relocare`] = relocareFeatureGroup;
+        break;
+
+      case 5:
+        L.marker.svgMarker([sesizare.latitudine, sesizare.longitudine], { iconOptions: { color: "rgb(26, 86, 219)", fillOpacity: 0.6 }}).addTo(reabilitareFeatureGroup);
+        overlayMaps[`<div class="h-3 w-3 inline-block mr-2 ${sesizare.status__culoare}"></div>Centru reabilitare`] = reabilitareFeatureGroup;
+        break;
+    };
+  };
+
+  let controls = L.control.layers(null, overlayMaps, {collapsed:false}).addTo(map);
+
+  var bounds = new L.LatLngBounds(markers);
+  map.fitBounds(bounds, {padding: [20, 20]});
+
+  map.on('layeradd layerremove', function () {
+    // Create new empty bounds
+    var bounds = new L.LatLngBounds();
+    // Iterate the map's layers
+    map.eachLayer(function (layer) {
+        // Check if layer is a featuregroup
+        if (layer instanceof L.FeatureGroup) {
+            // Extend bounds with group's bounds
+            bounds.extend(layer.getBounds());
+        }
+    });
+    // Check if bounds are valid (could be empty)
+    if (bounds.isValid()) {
+        // Valid, fit bounds
+        map.fitBounds(bounds, {padding: [20, 20]});
+    } else {
+        // Invalid, fit world
+        map.fitWorld();
+    }
+  });
+
+</script>
+{% endblock javascript %}

@@ -1,9 +1,10 @@
 {% extends "base.html" %}
 {% load leaflet_tags %}
 {% block head %}
-  {% leaflet_js plugins="forms" %}
-  {% leaflet_css plugins="forms" %}
-
+  {% comment %} {% leaflet_js plugins="forms" %}
+  {% leaflet_css plugins="forms" %} {% endcomment %}
+  <link rel="stylesheet" href="https://unpkg.com/leaflet-geosearch@3.0.0/dist/geosearch.css"/>
+  <script src="https://unpkg.com/leaflet-geosearch@latest/dist/bundle.min.js"></script>
 
 <style>
 
@@ -18,6 +19,56 @@
 
   .django-leaflet-raw-textarea {
       width: 100%;
+  }
+
+  .leaflet-geosearch-bar form input {
+    min-width: 97%;
+    background: #374151;
+  }
+
+  .leaflet-touch .leaflet-geosearch-bar form {
+    background: #374151;
+  }
+
+  .leaflet-touch .leaflet-geosearch-bar form input {
+    width: 20px;
+  }
+
+  .leaflet-control-geosearch .results.active {
+    background: #374151;
+  }
+
+  .leaflet-control-geosearch .results > .active, .leaflet-control-geosearch .results > :hover {
+    background: #1f2937;
+  }
+
+  .leaflet-bar-notfound {
+    background: #374151;
+  }
+
+  .leaflet-control-layers-expanded {
+    background: #374151;
+    color: #fff;
+  }
+  .leaflet-control-layers-selector {
+    margin: 2px;
+    top: 0;
+  }
+  .leaflet-bar a {
+    background: #374151;
+    color: #fff;
+  }
+  .leaflet-bar a:hover, .leaflet-bar a:focus {
+    color: #374151;
+  }
+  [type="checkbox"], [type="radio"] {
+    background-color: #374151;
+  }
+  [type="checkbox"]:focus, [type="radio"]:focus {
+    --tw-ring-color: none;
+  }
+  .dark [type="checkbox"]:checked, .dark [type="radio"]:checked, [type="checkbox"]:checked, [type="radio"]:checked {
+    background-color: #1f2937;
   }
 
 </style>
@@ -39,5 +90,3 @@
 </section>
 
 {% endblock content %}
-{% block javascript %}
-{% endblock javascript %}

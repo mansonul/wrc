@@ -1,0 +1,72 @@
+{% extends 'base.html' %}
+{% load allauth i18n %}
+
+{% block main_text %}
+  Adaugă voluntar
+{% endblock %}
+
+{% block content %}
+<section class="bg-gray-50 dark:bg-gray-800">
+  <div class="max-w-screen-xl px-4 py-8 mx-auto space-y-12 lg:space-y-20 lg:py-24 lg:px-6">
+		<form method="post">
+			{% csrf_token %}
+			<div class="space-y-12">
+				<div class="border-b border-gray-900/10 pb-12">
+					<div class="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
+						
+						<div class="col-span-full">
+							{% if form.email.errors %}
+								{% for error in form.email.errors %}
+								<div class="p-2text-sm rounded-lg dark:bg-gray-800 dark:text-red-400" role="alert">
+									<span class="font-medium">{{error|escape}}</span>
+								</div>
+								{% endfor %}
+							{% endif %}
+							<label for="{{form.email.id_for_label}}" class="block text-sm font-medium leading-6 text-gray-900 dark:text-white">Adresa de email</label>
+							<div class="mt-2">
+								<div class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-0 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+									{{form.email}}
+								</div>
+							</div>
+						</div>
+
+						<div class="col-span-full">
+							{% if form.password1.errors %}
+								{% for error in form.password1.errors %}
+								<div class="p-2text-sm rounded-lg dark:bg-gray-800 dark:text-red-400" role="alert">
+									<span class="font-medium">{{error|escape}}</span>
+								</div>
+								{% endfor %}
+							{% endif %}
+							<label for="{{form.password1.id_for_label}}" class="block text-sm font-medium leading-6 text-gray-900 dark:text-white">Parola</label>
+							<div class="mt-2">
+								<div class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-0 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+									{{form.password1}}
+								</div>
+							</div>
+						</div>
+
+						<div class="col-span-full">
+							{% if form.password2.errors %}
+								{% for error in form.password2.errors %}
+								<div class="p-2text-sm rounded-lg dark:bg-gray-800 dark:text-red-400" role="alert">
+									<span class="font-medium">{{error|escape}}</span>
+								</div>
+								{% endfor %}
+							{% endif %}
+							<label for="{{form.password2.id_for_label}}" class="block text-sm font-medium leading-6 text-gray-900 dark:text-white">Repetă parola</label>
+							<div class="mt-2">
+								<div class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-0 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+									{{form.password2}}
+								</div>
+							</div>
+						</div>
+
+					</div>
+				</div>
+				<button type="submit" class="text-white bg-purple-700 hover:bg-purple-800 focus:ring-4 focus:ring-purple-300 font-medium rounded-lg text-sm px-4 lg:px-5 py-2 lg:py-2.5 sm:mr-2 lg:mr-0 dark:bg-purple-600 dark:hover:bg-purple-700 focus:outline-none dark:focus:ring-purple-800">Adaugă voluntar</button>
+			</div>
+		</form>
+	</div>
+</section>
+{% endblock content %}
