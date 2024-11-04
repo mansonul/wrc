@@ -37,6 +37,7 @@ def sesizare_list(request: HttpRequest) -> HttpResponse:
     return render(request, 'report/sesizare_list.html', context)
 
 def sesizare_detail(request: HttpRequest, pk: int) -> HttpResponse:
+    sesizare_js = list(Sesizare.objects.values('latitudine', 'longitudine', 'status', 'status__categorie', 'status__culoare', 'name'))
     sesizare = Sesizare.objects.select_related('image', 'status', 'status__categorie', 'user').prefetch_related('raportvoluntar_set', 'raportvoluntar_set__voluntar', 'raportvoluntar_set__voluntar__user').get(pk=pk)
     raport_qs = RaportVoluntar.objects.select_related('sesizare', 'voluntar__user')
 
@@ -47,6 +48,7 @@ def sesizare_detail(request: HttpRequest, pk: int) -> HttpResponse:
 
     context = {
         'sesizare': sesizare,
+        'sesizare_js': sesizare_js,
         'raport': raport,
     }
     
