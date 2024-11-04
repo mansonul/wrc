@@ -87,7 +87,7 @@ def report_create(request: HttpRequest) -> HttpResponse:
             plain_message = strip_tags(html_message)
 
             message1 = EmailMultiAlternatives(
-                from_email="mailgun@sandbox7831251a49c5436e9c3073c966ce0f79.mailgun.org",
+                from_email="volutia@gmail.com",
                 subject=f"Sesizare nouă - {sesizare.name}",
                 to=["volutia@gmail.com",],
                 body=plain_message,
