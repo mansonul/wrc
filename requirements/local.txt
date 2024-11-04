@@ -35,3 +35,6 @@ pytest-django==4.8.0  # https://github.com/pytest-dev/pytest-django
 
 # Custom
 django-unfold  # https://github.com/unfoldadmin/django-unfold?tab=readme-ov-file#installation
+django>=4.2.16 # not directly required, pinned by Snyk to avoid a vulnerability
+sqlparse>=0.5.0 # not directly required, pinned by Snyk to avoid a vulnerability
+zipp>=3.19.1 # not directly required, pinned by Snyk to avoid a vulnerability
