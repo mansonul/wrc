@@ -14,9 +14,9 @@ from django.utils import timezone
 from django.utils.html import strip_tags
 
 from wrc_reporting_tool.users.models import User 
-from report.filters import SesizareFilter
-from report.forms import ImageForm, SesizareForm, AdaugaVoluntar, CompleteazaRaport, CreazaVoluntar
-from report.models import (Sesizare, Clasa, Ordin, Status, Voluntar, RaportVoluntar, TipConflict, SpecieIdentificata)
+from wrc_reporting_tool.report.filters import SesizareFilter
+from wrc_reporting_tool.report.forms import ImageForm, SesizareForm, AdaugaVoluntar, CompleteazaRaport, CreazaVoluntar
+from wrc_reporting_tool.report.models import (Sesizare, Clasa, Ordin, Status, Voluntar, RaportVoluntar, TipConflict, SpecieIdentificata)
 
 def sesizare_list(request: HttpRequest) -> HttpResponse:
     array_list = list(Sesizare.objects.values('latitudine', 'longitudine', 'status', 'status__categorie', 'status__culoare', 'name'))

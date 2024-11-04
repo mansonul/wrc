@@ -7,7 +7,7 @@ from django.urls import include, path
 from django.views import defaults as default_views
 from django.views.generic import TemplateView
 
-from report.views import index, dashboard_list, add_voluntar_to_sesizare, completeaza_raport, export
+from wrc_reporting_tool.report.views import index, dashboard_list, add_voluntar_to_sesizare, completeaza_raport, export
 
 
 urlpatterns = [

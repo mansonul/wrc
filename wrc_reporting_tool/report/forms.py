@@ -1,12 +1,9 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
-# from django.contrib.auth.models import User
 from django.contrib.auth import get_user_model
 from django.contrib.gis import forms as geoforms
 
-from wrc_reporting_tool.users.forms import UserSignupForm
-from allauth.account.forms import SignupForm
-from .models import Image, RaportVoluntar, Sesizare, Status, Voluntar
+from .models import Image, RaportVoluntar, Sesizare, Status
 
 User = get_user_model()
 

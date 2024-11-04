@@ -1,6 +1,6 @@
 from django.urls import path
 
-from report.views import sesizare_list, report_create, specie_partial, kmz, sesizare_detail, voluntar_signup
+from wrc_reporting_tool.report.views import sesizare_list, report_create, specie_partial, kmz, sesizare_detail, voluntar_signup
 
 
 app_name = "reports"
