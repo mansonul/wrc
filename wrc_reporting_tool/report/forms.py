@@ -3,9 +3,6 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import get_user_model
 from django.contrib.gis import forms as geoforms
 
-from django_recaptcha.fields import ReCaptchaField
-from django_recaptcha.widgets import ReCaptchaV2Invisible
-
 from .models import Image, RaportVoluntar, Sesizare, Status
 
 User = get_user_model()
@@ -32,10 +29,9 @@ class SesizareForm(geoforms.ModelForm):
     longitudine = forms.FloatField(widget=forms.NumberInput(attrs={
         'class': 'block w-full rounded-md border-0 bg-transparent py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 sm:text-sm sm:leading-6 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500',                
         }))
-    captcha = ReCaptchaField(widget=ReCaptchaV2Invisible)
     class Meta:
         model = Sesizare
-        fields = ["name", "clasa", "ordin", "status", "latitudine", "longitudine", "description","captcha"]
+        fields = ["name", "clasa", "ordin", "status", "latitudine", "longitudine", "description",]
         widgets = {
             'name': forms.TextInput(attrs={
                 'class': 'block w-full rounded-md border-0 bg-transparent py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 sm:text-sm sm:leading-6 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500',
