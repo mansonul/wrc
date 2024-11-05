@@ -91,7 +91,7 @@ def report_create(request: HttpRequest) -> HttpResponse:
             message1 = EmailMultiAlternatives(
                 from_email="sesizare@mg.wilderness-research.org",
                 subject=f"Sesizare nouă - {sesizare.name}",
-                to=["volutia@gmail.com",],
+                to=["volutia@gmail.com", "dragos.mantoiu@wilderness-research.com"],
                 body=plain_message,
                 )
             message1.attach_alternative(html_message, "text/html")
