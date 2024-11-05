@@ -93,6 +93,7 @@ THIRD_PARTY_APPS = [
     "leaflet",
     "django_htmx",
     "simple_history",
+    "django_recaptcha",
 ]
 
 LOCAL_APPS = [
@@ -351,3 +352,5 @@ LEAFLET_CONFIG = {
 
 PAGE_SIZE = 5
 SESIZARI_PAGE_SIZE = 3
+RECAPTCHA_PUBLIC_KEY = env("RECAPTCHA_PUBLIC_KEY", default='MyRecaptchaKey123')
+RECAPTCHA_PRIVATE_KEY = env("RECAPTCHA_PRIVATE_KEY", default='MyRecaptchaPrivateKey456')
