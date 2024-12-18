@@ -34,6 +34,8 @@ const searchControl = new GeoSearch.GeoSearchControl({
 });
 
 function onLocationError(b) {
+  let latitudine = document.getElementById("id_latitudine");
+  let longitudine = document.getElementById("id_longitudine");
 
   function onMapClick(e) {
     marker = new L.marker(e.latlng, { draggable: 'true' });
@@ -53,6 +55,18 @@ function onLocationError(b) {
     longitudine.value = e.latlng.lng;
 
   };
+  const parentLatitudine = latitudine.parentNode;
+  const parentLatitudine2 = parentLatitudine.parentNode;
+  parentLatitudine.classList.remove("hidden");
+  parentLatitudine.previousElementSibling.classList.remove("hidden");
+  parentLatitudine2.classList.remove("hidden");
+
+  const parentLongitudine = longitudine.parentNode;
+  const parentLongitudine2 = parentLongitudine.parentNode;
+  parentLongitudine.classList.remove("hidden");
+  parentLongitudine.previousElementSibling.classList.remove("hidden")
+  parentLongitudine2.classList.remove("hidden");
+  
 
   map.once('click', onMapClick);
   map.addControl(searchControl);
