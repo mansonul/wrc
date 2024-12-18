@@ -38,7 +38,7 @@ def sesizare_list(request: HttpRequest) -> HttpResponse:
 
 def sesizare_detail(request: HttpRequest, pk: int) -> HttpResponse:
     sesizare_js = list(Sesizare.objects.values('latitudine', 'longitudine', 'status', 'status__categorie', 'status__culoare', 'name'))
-    sesizare = Sesizare.objects.select_related('image', 'status', 'status__categorie', 'user').prefetch_related('raportvoluntar_set', 'raportvoluntar_set__voluntar', 'raportvoluntar_set__voluntar__user').get(pk=pk)
+    sesizare = get_object_or_404(Sesizare.objects.select_related('image', 'status', 'status__categorie', 'user').prefetch_related('raportvoluntar_set', 'raportvoluntar_set__voluntar', 'raportvoluntar_set__voluntar__user'), pk=pk)
     raport_qs = RaportVoluntar.objects.select_related('sesizare', 'voluntar__user')
 
     if sesizare.raportvoluntar_set.filter(sesizare=pk).exists():
