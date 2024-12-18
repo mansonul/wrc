@@ -45,8 +45,8 @@ class SesizareForm(forms.ModelForm):
         
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.fields['latitudine'].required = False
-        self.fields['longitudine'].required = False
+        self.fields['latitudine'].required = True
+        self.fields['longitudine'].required = True
 
 
 class AdaugaVoluntar(forms.ModelForm):

@@ -28,28 +28,28 @@
           </div>
         </div>
 
+        {% if form.latitudine.errors %}
+          {% for error in form.latitudine.errors %}
+            <div class="p-4 mb-4 text-sm rounded-lg dark:bg-gray-800 dark:text-red-400" role="alert">
+              <span class="font-medium">Acest câmp este obligatoriu. Selectați o locație pe hartă!</span>
+            </div>
+          {% endfor %}
+        {% endif %}
         <div class="hidden col-span-full">
-          {% if form.latitudine.errors %}
-            <ol>
-            {% for error in form.latitudine.errors %}
-                <li><strong>{{ error|escape }}</strong></li>
-            {% endfor %}
-            </ol>
-          {% endif %}
           <label for="{{form.latitudine.id_for_label}}" class="hidden text-sm font-medium leading-6 text-gray-900 dark:text-white">{{form.latitudine.label}}</label>
           <div class="hidden bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
             {{form.latitudine}}
           </div>
         </div>
 
+        {% if form.longitudine.errors %}
+          {% for error in form.longitudine.errors %}
+              <div class="p-4 mb-4 text-sm rounded-lg dark:bg-gray-800 dark:text-red-400" role="alert">
+                <span class="font-medium">Acest câmp este obligatoriu. Selectați o locație pe hartă!</span>
+              </div>
+          {% endfor %}
+        {% endif %}
         <div class="hidden col-span-full">
-          {% if form.longitudine.errors %}
-            <ol>
-            {% for error in form.longitudine.errors %}
-                <li><strong>{{ error|escape }}</strong></li>
-            {% endfor %}
-            </ol>
-          {% endif %}
           <label for="{{form.longitudine.id_for_label}}" class="hidden text-sm font-medium leading-6 text-gray-900 dark:text-white">{{form.longitudine.label}}</label>
           <div class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 hidden w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
             {{form.longitudine}}
