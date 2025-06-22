@@ -1,9 +1,11 @@
 from django.conf import settings
 from django.core.exceptions import ValidationError
-from django.core.validators import FileExtensionValidator
+from django.core.validators import FileExtensionValidator, RegexValidator
 from django.contrib.gis.db import models
 from django.urls import reverse
 from simple_history.models import HistoricalRecords
+
+from phonenumber_field.modelfields import PhoneNumberField
 
 from .managers import SesizareQuerySet
 
@@ -104,8 +106,10 @@ class Sesizare(models.Model):
     latitudine = models.FloatField(null=True, blank=True)
     longitudine = models.FloatField(null=True, blank=True)
     image = models.ForeignKey(Image, on_delete=models.CASCADE)
+    telefon = PhoneNumberField(region="RO", null=True, blank=True)
+    email = models.EmailField(null=True, blank=True)
     description = models.TextField(null=True, blank=True)
-    history = HistoricalRecords()
+    # history = HistoricalRecords()
 
     objects = SesizareQuerySet.as_manager()
 
@@ -136,7 +140,7 @@ class RaportVoluntar(models.Model):
     numar_indivizi = models.SmallIntegerField(blank=True,null=True)
     observatii_specialist = models.TextField(null=True, blank=True)
     preluare_sesizare = models.DateTimeField(auto_now_add=False, blank=True, null=True)
-    history = HistoricalRecords()
+    # history = HistoricalRecords()
 
     def __str__(self) -> str:
         return str(self.sesizare)

@@ -3,6 +3,9 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import get_user_model
 from django.contrib.gis import forms as geoforms
 
+from django_recaptcha.fields import ReCaptchaField
+from django_recaptcha.widgets import ReCaptchaV2Checkbox
+
 from .models import Image, RaportVoluntar, Sesizare, Status
 
 User = get_user_model()
@@ -23,19 +26,30 @@ class ImageForm(forms.ModelForm):
 
 
 class SesizareForm(forms.ModelForm):
-    latitudine = forms.FloatField(widget=forms.NumberInput(attrs={
+    latitudine = forms.FloatField(
+        required=True,
+        widget=forms.NumberInput(attrs={
             'readonly': '',
             'class': 'block w-full rounded-md border-0 bg-transparent py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 sm:text-sm sm:leading-6 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500',                
         }))
-    longitudine = forms.FloatField(widget=forms.NumberInput(attrs={
-        'readonly': '',
-        'class': 'block w-full rounded-md border-0 bg-transparent py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 sm:text-sm sm:leading-6 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500',                
+    longitudine = forms.FloatField(
+        required=True,
+        widget=forms.NumberInput(attrs={
+            'readonly': '',
+            'class': 'block w-full rounded-md border-0 bg-transparent py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 sm:text-sm sm:leading-6 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500',                
         }))
+    captcha = ReCaptchaField(widget=ReCaptchaV2Checkbox)
     class Meta:
         model = Sesizare
-        fields = ["name", "clasa", "ordin", "status", "latitudine", "longitudine", "description",]
+        fields = ["name", "clasa", "ordin", "status", "latitudine", "longitudine", "description","telefon", "email"]
         widgets = {
             'name': forms.TextInput(attrs={
+                'class': 'block w-full rounded-md border-0 bg-transparent py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 sm:text-sm sm:leading-6 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500',
+                'autocomplete': 'off'}),
+            'telefon': forms.TextInput(attrs={
+                'class': 'block w-full rounded-md border-0 bg-transparent py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 sm:text-sm sm:leading-6 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500',
+                'autocomplete': 'off'}),
+            'email': forms.EmailInput(attrs={
                 'class': 'block w-full rounded-md border-0 bg-transparent py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 sm:text-sm sm:leading-6 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500',
                 'autocomplete': 'off'}),
             'description': forms.Textarea(attrs={
@@ -45,8 +59,19 @@ class SesizareForm(forms.ModelForm):
         
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.fields['latitudine'].required = True
-        self.fields['longitudine'].required = True
+        # self.fields['latitudine'].required = True
+        # self.fields['longitudine'].required = True
+    
+    def clean(self):
+        cleaned_data = super().clean() # Obține datele validate până acum
+        telefon = cleaned_data.get('telefon')
+        email = cleaned_data.get('email')
+
+        if not telefon and not email:
+            # Dacă ambele câmpuri sunt goale, adaugă o eroare non-field
+            raise forms.ValidationError("Trebuie să completezi fie numărul de telefon, fie adresa de email.")
+        
+        return cleaned_data # Returnează datele validate
 
 
 class AdaugaVoluntar(forms.ModelForm):
