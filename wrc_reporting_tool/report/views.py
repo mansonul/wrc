@@ -81,27 +81,27 @@ def report_create(request: HttpRequest) -> HttpResponse:
             
             form_instance.save()
 
-            # sesizare = Sesizare.objects.first()
+            sesizare = Sesizare.objects.first()
 
-            # email_body = {
-            #     "nume_sesizare": sesizare.name,
-            #     "descriere_sesizare": sesizare.description,
-            #     "data_sesizare": sesizare.created,
-            #     "link_sesizare": sesizare.get_absolute_url(),
-            #     "imagine_sesizare": sesizare.image.image.url
-            # }
+            email_body = {
+                "nume_sesizare": sesizare.name,
+                "descriere_sesizare": sesizare.description,
+                "data_sesizare": sesizare.created,
+                "link_sesizare": sesizare.get_absolute_url(),
+                "imagine_sesizare": sesizare.image.image.url
+            }
 
-            # html_message = render_to_string("emails/sesizare.html", context=email_body)
-            # plain_message = strip_tags(html_message)
+            html_message = render_to_string("emails/sesizare.html", context=email_body)
+            plain_message = strip_tags(html_message)
 
-            # message1 = EmailMultiAlternatives(
-            #     from_email="sesizare@mg.wilderness-research.org",
-            #     subject=f"Sesizare nouă - {sesizare.name}",
-            #     to=["volutia@gmail.com", "dragos.mantoiu@wilderness-research.com"],
-            #     body=plain_message,
-            #     )
-            # message1.attach_alternative(html_message, "text/html")
-            # message1.send()
+            message1 = EmailMultiAlternatives(
+                from_email="sesizare@mg.wilderness-research.org",
+                subject=f"Sesizare nouă - {sesizare.name}",
+                to=["volutia@gmail.com", "dragos.mantoiu@wilderness-research.com"],
+                body=plain_message,
+                )
+            message1.attach_alternative(html_message, "text/html")
+            message1.send()
 
             return redirect("/sesizari/")
         else:
