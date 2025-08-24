@@ -63,12 +63,6 @@ def report_create(request: HttpRequest) -> HttpResponse:
         form = SesizareForm(request.POST)
         img_form = ImageForm(request.POST, request.FILES)
 
-        # Aici este cheia! Printează erorile înainte de a returna răspunsul
-        if not form.is_valid(): # Verificăm explicit dacă form e invalid
-            print("Erori în SesizareForm:", form.errors)
-        if not img_form.is_valid(): # Verificăm explicit dacă img_form e invalid
-            print("Erori în ImageForm:", img_form.errors)
-
         if form.is_valid() and img_form.is_valid():
             form_instance = form.save(commit=False)
             form_instance.user = user

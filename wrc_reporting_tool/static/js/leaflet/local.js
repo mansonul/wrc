@@ -68,7 +68,7 @@ function onLocationError(b) {
 
   };
 
-  map.once('click', onMapClick);
+  map.on('click', onMapClick);
   map.addControl(searchControl);
 }
 
