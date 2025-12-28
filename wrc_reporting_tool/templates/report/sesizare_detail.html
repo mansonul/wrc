@@ -41,7 +41,6 @@
 {% endblock %}
 
 {% block content %}
-  {{sesizare_js|json_script:"sesizare"}}
   <section class="bg-white dark:bg-gray-900">
     <div class="max-w-screen-xl px-4 py-8 mx-auto lg:py-12 lg:px-6">
       <div class="max-w-screen-md mx-auto mb-2 text-center lg:mb-12">
@@ -120,7 +119,7 @@
                   </div>
                 </div>
               </address>
-              <img src="{{ sesizare.image.image.url }}" alt="" />
+              <img src="{{ sesizare.image.image.url }}" alt="Imagine pentru {{sesizare.name}}" />
             </header>
             <p class="mb-8 font-light lg:text-xl dark:text-gray-400">{{ sesizare.description }}</p>
           </article>
@@ -138,7 +137,7 @@
                 </div>
               </div>
             </address>
-            <img src="{{ sesizare.image.image.url }}" alt="" />
+            <img src="{{ sesizare.image.image.url }}" alt="Imagine pentru {{sesizare.name}}" />
           </header>
           <p class="mb-8 font-light lg:text-xl dark:text-gray-400">{{ sesizare.description }}</p>
         </article>
@@ -149,5 +148,40 @@
 {% endblock %}
 
 {% block javascript %}
-  <script src="{% static 'js/leaflet/sesizare_list.js'%}"></script>
+  <script>
+    let map = L.map('map').setView([{{latitudine}}, {{longitudine}}], 13);
+
+    L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      maxZoom: 19,
+      attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+    }).addTo(map);
+
+    switch ('{{culoare}}') {
+      case 'bg-pink-500': L.marker.svgMarker([{{latitudine}}, {{longitudine}}], { iconOptions: { color: "rgb(231, 70, 148)", fillOpacity: 0.6 }}).addTo(map);
+      break;
+
+      case 'bg-yellow-400': L.marker.svgMarker([{{latitudine}}, {{longitudine}}], { iconOptions: { color: "rgb(227, 160, 8)", fillOpacity: 0.6 }}).addTo(map);
+      break;
+
+      case 'bg-green-700': L.marker.svgMarker([{{latitudine}}, {{longitudine}}], { iconOptions: { color: "rgb(4, 108, 78)", fillOpacity: 0.6 }}).addTo(map);
+      break;
+
+      case 'bg-red-700': L.marker.svgMarker([{{latitudine}}, {{longitudine}}], { iconOptions: { color: "rgb(200, 30, 30)", fillOpacity: 0.6 }}).addTo(map);
+      break;
+
+      case 'bg-pink-900': L.marker.svgMarker([{{latitudine}}, {{longitudine}}], { iconOptions: { color: "rgb(117, 26, 61)", fillOpacity: 0.6 }}).addTo(map);
+      break;
+
+      case 'bg-indigo-500': L.marker.svgMarker([{{latitudine}}, {{longitudine}}], { iconOptions: { color: "rgb(104, 117, 245)", fillOpacity: 0.6 }}).addTo(map);
+      break;
+
+      case 'bg-blue-700': L.marker.svgMarker([{{latitudine}}, {{longitudine}}], { iconOptions: { color: "rgb(26, 86, 219)", fillOpacity: 0.6 }}).addTo(map);
+      break;
+
+      default:
+        L.marker.svgMarker([{{latitudine}}, {{longitudine}}], { iconOptions: { color: "rgb(4, 108, 78)", fillOpacity: 0.6 }}).addTo(map);
+        break;      
+    }
+
+  </script>
 {% endblock %}

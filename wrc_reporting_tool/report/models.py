@@ -19,10 +19,10 @@ def validate_file_mimetype(image):
     file_mimetype = magic.from_buffer(image.read(1024), mime=True)
 
     if file_mimetype not in accept:
-        raise ValidationError('Image type not supported.')
+        raise ValidationError('Tipul de imagine nu este suportat.')
 
 class Image(models.Model):
-    image = models.ImageField(default="no-image.svg", validators=[ext_validator, validate_file_mimetype])
+    image = models.ImageField(default="vertical_bat.jpeg", validators=[ext_validator, validate_file_mimetype])
 
 
 class Clasa(models.Model):

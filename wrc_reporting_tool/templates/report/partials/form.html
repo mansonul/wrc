@@ -2,57 +2,96 @@
 <form method="post" enctype="multipart/form-data">
   {% csrf_token %}
   <div class="space-y-12">
+
+    {% if form.errors %}
+      <div class="mb-6" role="alert">
+        <div class="flex items-center p-4 text-sm text-red-800 border border-red-300 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400 dark:border-red-800">
+          <svg class="flex-shrink-0 inline w-5 h-5 mr-3" fill="currentColor" viewBox="0 0 20 20">
+            <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"></path>
+          </svg>
+          <div>
+            <span class="font-medium">Eroare!</span> Există probleme în formular. Verifică câmpurile de mai jos.
+          </div>
+        </div>
+      </div>
+    {% endif %}
+
     <div class="border-b border-gray-900/10 pb-12">
       <div class="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
         
         <div class="col-span-full">
-          {% if form.name.errors %}
-            <ol>
-            {% for error in form.name.errors %}
-                <li><strong>{{ error|escape }}</strong></li>
-            {% endfor %}
-            </ol>
-          {% endif %}
-          <label for="{{form.name.id_for_label}}" class="block text-sm font-medium leading-6 text-gray-900 dark:text-white">Denumire incident</label>
+          <label for="{{form.name.id_for_label}}" class="block text-sm font-medium leading-6 text-gray-900 dark:text-white">Denumire incident*</label>
           <div class="mt-2">
             <div class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-0 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
               {{form.name}}
             </div>
           </div>
+          {% if form.name.errors %}
+            <ol>
+            {% for error in form.name.errors %}
+                <li class="text-red-600"><strong>{{ error|escape }}</strong></li>
+            {% endfor %}
+            </ol>
+          {% endif %}
         </div>
 
         <div class="col-span-full">
-          <label class="block text-sm font-medium leading-6 text-gray-900 dark:text-white">Locație</label>
-          <div class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-            <div id="map"></div>
-          </div>
-        </div>
+          <div class="relative border-2 border-dashed border-gray-400 rounded-xl p-6 pt-10">
 
-        {% if form.latitudine.errors %}
-          {% for error in form.latitudine.errors %}
-            <div class="p-4 mb-4 text-sm rounded-lg dark:bg-gray-800 dark:text-red-400" role="alert">
-              <span class="font-medium">Acest câmp este obligatoriu. Selectați o locație pe hartă!</span>
+            <div class="absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
+              <span class="px-4 bg-white dark:bg-gray-900 text-sm font-medium text-gray-700 dark:text-gray-300 flex items-center">
+                <span class="flex-grow border-t border-dashed border-gray-400"></span>
+                <span class="mx-4">Localizare*</span>
+                <span class="flex-grow border-t border-dashed border-gray-400"></span>
+              </span>
             </div>
-          {% endfor %}
-        {% endif %}
-        <div class="hidden col-span-full">
-          <label for="{{form.latitudine.id_for_label}}" class="hidden text-sm font-medium leading-6 text-gray-900 dark:text-white">{{form.latitudine.label}}</label>
-          <div class="hidden bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-            {{form.latitudine}}
-          </div>
-        </div>
 
-        {% if form.longitudine.errors %}
-          {% for error in form.longitudine.errors %}
-              <div class="p-4 mb-4 text-sm rounded-lg dark:bg-gray-800 dark:text-red-400" role="alert">
-                <span class="font-medium">Acest câmp este obligatoriu. Selectați o locație pe hartă!</span>
+            {% comment %} Harta {% endcomment %}
+            <div class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+              <div id="map"></div>
+            </div>
+
+            {% comment %} Coordonate fără GPS {% endcomment %}
+            <div class="flex flex-col md:flex-row md:gap-6 gap-6">
+
+              {% comment %} Latitudine {% endcomment %}
+              <div class="flex-1 pt-8"> 
+                <label for="{{form.latitudine.id_for_label}}" class="hidden text-sm font-medium leading-6 text-gray-900 dark:text-white">{{form.latitudine.label}}*</label>
+                <div class="hidden bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                  {{form.latitudine}}
+                </div>
+                {% if form.latitudine.errors %}
+                  {% for error in form.latitudine.errors %}
+                    <div class="text-red-600" role="alert">
+                      <span class="font-medium">Acest câmp este obligatoriu. Selectați o locație pe hartă!</span>
+                    </div>
+                  {% endfor %}
+                {% endif %}
               </div>
-          {% endfor %}
-        {% endif %}
-        <div class="hidden col-span-full">
-          <label for="{{form.longitudine.id_for_label}}" class="hidden text-sm font-medium leading-6 text-gray-900 dark:text-white">{{form.longitudine.label}}</label>
-          <div class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 hidden w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-            {{form.longitudine}}
+
+              {% comment %} Longitudine {% endcomment %}
+              <div class="flex-1 pt-8">
+                <label for="{{form.longitudine.id_for_label}}" class="hidden text-sm font-medium leading-6 text-gray-900 dark:text-white">{{form.longitudine.label}}*</label>
+                <div class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 hidden w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                  {{form.longitudine}}
+                </div>
+                {% if form.longitudine.errors %}
+                  {% for error in form.longitudine.errors %}
+                      <div class="text-red-600" role="alert">
+                        <span class="font-medium">Acest câmp este obligatoriu. Selectați o locație pe hartă!</span>
+                      </div>
+                  {% endfor %}
+                {% endif %}
+              </div>
+
+            </div>
+            <div id="aditional">
+              <div class="hidden flex-1 pt-8">
+                <span class="text-sm font-medium leading-6 text-gray-900 dark:text-white">
+                  Dacă nu aveți acces la GPS introduceți adresa.
+                </span>
+              </div>
+            </div>
           </div>
         </div>
 
@@ -64,7 +103,7 @@
           {% endif %}
           <label for="{{img_form.image.id_for_label}}"
                   class="block text-sm font-medium leading-6 text-gray-900 dark:text-white">
-            Selectează imagine
+            Selectează imagine*
           </label>
           <label for="{{img_form.image.id_for_label}}"
                   x-data="{ files: null }"
@@ -73,8 +112,8 @@
               <svg class="w-8 h-8 mb-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 16">
                 <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2"/>
               </svg>
-              <p class="mb-2 text-sm text-gray-500 dark:text-gray-400"><span class="font-semibold">Click to upload</span> or drag and drop</p>
-              <p class="text-xs text-gray-500 dark:text-gray-400">SVG, PNG, JPG or GIF (MAX. 800x400px)</p>
+              <p class="mb-2 text-sm text-gray-500 dark:text-gray-400"><span class="font-semibold">Apăsați pentru upload</span> sau drag and drop</p>
+              <p class="text-xs text-gray-500 dark:text-gray-400">PNG sau JPG</p>
             </div>
               {{ img_form.image }}
               <template x-if="files !== null">
@@ -90,54 +129,73 @@
               </template>
           </label>
         </div>
-        {% if form.non_field_errors %}
-            <div class="errorlist non-field-errors">
-                {% for error in form.non_field_errors %}
-                    <p>{{ error }}</p>
-                {% endfor %}
-            </div>
-        {% endif %}
-        <div class="col-span-full">
-          {% if form.telefon.errors %}
-            <ol>
-            {% for error in form.telefon.errors %}
-                <li><strong>{{ error|escape }}</strong></li>
-            {% endfor %}
-            </ol>
-          {% endif %}
-          <label for="{{form.telefon.id_for_label}}" class="block text-sm font-medium leading-6 text-gray-900 dark:text-white"> Număr de telefon:</label>
-          <div class="mt-2">
-            <div class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-0 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-              {{form.telefon}}
-            </div>
-          </div>
-        </div>
 
         <div class="col-span-full">
-          <span class="block text-sm font-medium leading-6 text-gray-900 dark:text-white">sau</span>
-        </div>
-        
-        <div class="col-span-full">
-          {% if form.email.errors %}
-            <ol>
-            {% for error in form.email.errors %}
-                <li><strong><span class="block text-sm font-medium leading-6 text-gray-900 dark:text-white">{{ error|escape }}</span></strong></li>
-            {% endfor %}
-            </ol>
-          {% endif %}
-          <label for="{{form.email.id_for_label}}" class="block text-sm font-medium leading-6 text-gray-900 dark:text-white">Email:</label>
-          <div class="mt-2">
-            <div class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-0 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-              {{form.email}}
+
+          <div class="relative border-2 border-dashed border-gray-400 rounded-xl p-6 pt-10"> 
+
+            <div class="absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
+              <span class="px-4 bg-white dark:bg-gray-900 text-sm font-medium text-gray-700 dark:text-gray-300 flex items-center">
+                <span class="flex-grow border-t border-dashed border-gray-400"></span>
+                <span class="mx-4">Date de contact*</span>
+                <span class="flex-grow border-t border-dashed border-gray-400"></span>
+              </span>
             </div>
+
+            <div class="flex flex-col md:flex-row md:gap-6 gap-6">
+
+              <div class="flex-1">
+                {% if form.telefon.errors %}
+                  <ol>
+                  {% for error in form.telefon.errors %}
+                      <li><strong>{{ error|escape }}</strong></li>
+                  {% endfor %}
+                  </ol>
+                {% endif %}
+
+                <label for="{{form.telefon.id_for_label}}" class="block text-sm font-medium leading-6 text-gray-900 dark:text-white"> Număr de telefon:</label>
+                <div class="mt-2">
+                  <div class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-0 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                    {{form.telefon}}
+                  </div>
+                </div>
+              </div>
+
+              <div class="flex-1">
+                {% if form.email.errors %}
+                  <ol>
+                  {% for error in form.email.errors %}
+                      <li><strong><span class="block text-sm font-medium leading-6 text-gray-900 dark:text-white">{{ error|escape }}</span></strong></li>
+                  {% endfor %}
+                  </ol>
+                {% endif %}
+                <label for="{{form.email.id_for_label}}" class="block text-sm font-medium leading-6 text-gray-900 dark:text-white">Email:</label>
+                <div class="mt-2">
+                  <div class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-0 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                    {{form.email}}
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="flex-1 pt-8">
+              <span class="block text-sm font-medium leading-6 text-gray-900 dark:text-white">Datele de contact nu vor fi publice și vor fi vizibile doar voluntarului care va prelua cazul semnalat de dumneavoastră.</span>
+            </div>
+            {% if form.non_field_errors %}
+              <div class="text-red-600">
+                {% for error in form.non_field_errors %}
+                  <p>{{ error }}</p>
+                {% endfor %}
+              </div>
+            {% endif %}
           </div>
+
         </div>
 
         <div class="col-span-full">
           {% if form.description.errors %}
             <ol>
             {% for error in form.description.errors %}
-                <li><strong>{{ error|escape }}</strong></li>
+                <li class="text-red-600"><strong>{{ error|escape }}</strong></li>
             {% endfor %}
             </ol>
           {% endif %}
@@ -152,7 +210,7 @@
         {% if form.captcha.errors %}
             <ul class="errorlist">
                 {% for error in form.captcha.errors %}
-                    <li>{{ error }}</li>
+                    <li class="text-red-600">{{ error }}</li>
                 {% endfor %}
             </ul>
         {% endif %}
@@ -163,6 +221,16 @@
   </div>
 </form>
 
-  {% block javascript %}
+{% block javascript %}
+  {% if form.errors %}
+    <script>
+      document.addEventListener('DOMContentLoaded', function() {
+        const firstError = document.querySelector('.text-red-600');
+        if (firstError) {
+          firstError.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          }
+      });
+    </script>
+  {% endif %}
   <script src="{% static 'js/leaflet/local.js'%}"></script>  
 {% endblock javascript %}

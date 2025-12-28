@@ -11,7 +11,6 @@ function onLocationFound(a) {
   let longitudine = document.getElementById("id_longitudine");
 
   let marker = new L.marker(a.latlng, { draggable: 'true' }).addTo(map);
-  //.bindPopup("You are within " + radius + " meters from this point").openPopup();
 
   latitudine.value = a.latlng.lat;
   longitudine.value = a.latlng.lng;
@@ -25,10 +24,42 @@ function onLocationFound(a) {
   });
 };
 
+function createCachedLocationIQProvider() {
+    const realProvider = new GeoSearch.LocationIQProvider({
+        params: {
+            key: 'pk.34c118ba1755f275f69349c45ba2b7f3',
+            countrycodes: 'ro,jp,md,ua,bg,hu,rs',
+            addressdetails: 1
+        }
+    });
+
+    const cache = new Map();
+    return {
+        async search({ query }) {
+            const key = query.toLowerCase().trim();
+
+            if (cache.has(key)) {
+                return cache.get(key);
+            }
+
+            try {
+                const results = await realProvider.search({ query });
+                if (results && results.length > 0) {
+                    cache.set(key, results);
+                }
+                return results;
+            } catch (error) {
+                return [];
+            }
+        }
+    };
+}
+
 const searchControl = new GeoSearch.GeoSearchControl({
   notFoundMessage: 'Nu am găsit adresa specificată',
   searchLabel: 'Caută adresă',
-  provider: new GeoSearch.OpenStreetMapProvider(),
+  // provider: new GeoSearch.OpenStreetMapProvider(),
+  provider: createCachedLocationIQProvider(),
   style: 'bar',
   showMarker: false,
 });
@@ -36,6 +67,7 @@ const searchControl = new GeoSearch.GeoSearchControl({
 function onLocationError(b) {
   let latitudine = document.getElementById("id_latitudine");
   let longitudine = document.getElementById("id_longitudine");
+  let aditional = document.getElementById("aditional");
 
   const parentLatitudine = latitudine.parentNode;
   const parentLatitudine2 = parentLatitudine.parentNode;
@@ -48,6 +80,9 @@ function onLocationError(b) {
   parentLongitudine.classList.remove("hidden");
   parentLongitudine.previousElementSibling.classList.remove("hidden")
   parentLongitudine2.classList.remove("hidden");
+
+  const parentAditional = aditional.firstElementChild;
+  parentAditional.classList.remove("hidden");
 
   function onMapClick(e) {
     marker = new L.marker(e.latlng, { draggable: 'true' });
