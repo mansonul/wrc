@@ -19,3 +19,4 @@ django-crispy-forms==2.3  # https://github.com/django-crispy-forms/django-crispy
 crispy-bootstrap5==2024.2  # https://github.com/django-crispy-forms/crispy-bootstrap5
 django-redis==5.4.0  # https://github.com/jazzband/django-redis
 django-widget_tweaks
+sqlparse>=0.5.4 # not directly required, pinned by Snyk to avoid a vulnerability
